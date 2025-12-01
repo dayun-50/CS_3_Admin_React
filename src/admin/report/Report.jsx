@@ -54,7 +54,6 @@ const Report = () => {
           />
         ) : (
           <BoardList 
-            data={MOCK_BOARD} 
             onSelectPost={setSelectedPost} 
           />
         )

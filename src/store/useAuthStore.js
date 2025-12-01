@@ -17,9 +17,6 @@ const useAuthStore = create((set) => ({
     sessionStorage.removeItem("token");
     sessionStorage.removeItem("id");
     set({ token: "", id: "", isLogin: false });
-
-    sessionStorage.removeItem("jamesAccessToken");
-    set({ token: "", id: "", isLogin: false });
   },
 }));
 export default useAuthStore;

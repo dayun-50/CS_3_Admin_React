@@ -21,8 +21,8 @@ function App() {
     <div className="container">
       <BrowserRouter>
         <Routes>
-          {/* <Route path='/*' element={!isLogin ? <Login /> : <MainIndex />} /> */}
-          <Route path="/*" element={<MainIndex />} />
+          <Route path='/*' element={!isLogin ? <Login /> : <MainIndex />} />
+          {/* <Route path="/*" element={<MainIndex />} /> */}
         </Routes>
       </BrowserRouter>
     </div>

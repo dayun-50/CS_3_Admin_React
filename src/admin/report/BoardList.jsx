@@ -1,11 +1,16 @@
 // src/admin/report/BoardList.jsx
 import React, { useState } from "react";
 import styles from "./BoardList.module.css";
+import useBoardList from "./useBoardList";
 
 const ITEMS_PER_PAGE = 10;
 
-const BoardList = ({ data, onSelectPost }) => {
+const BoardList = ({ onSelectPost }) => {
   const [currentPage, setCurrentPage] = useState(1);
+
+  const {
+    data
+  } = useBoardList();
 
   const totalPages = Math.ceil(data.length / ITEMS_PER_PAGE);
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;

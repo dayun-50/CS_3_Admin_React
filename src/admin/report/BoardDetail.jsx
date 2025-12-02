@@ -38,22 +38,40 @@ const BoardDetail = ({ post, setSelectedPost, onBack, onDelete }) => {
     <div className={styles.detailContainer}>
       <div className={styles.maincontainer}>
         <h2 style={{ marginBottom: "12px" }}>{post.title}</h2>
-        <p style={{ marginBottom: "8px" }}><strong>작성자:</strong> {post.user_id}</p>
-        <p><strong>작성일:</strong> {post.created_at}</p>
-        <p>
-          <strong>신고 종류:</strong>{" "}
-          {post.report_types &&
-            Object.entries(
-              post.report_types.reduce((acc, type) => {
-                acc[type] = (acc[type] || 0) + 1;
-                return acc;
-              }, {})
-            ).map(([type, count]) => (
-              <span key={type}>{`${type}(${count})`} </span>
-            ))
-          }
-        </p>
+
+        <div
+          style={{
+            display: "flex",
+            gap: "12px",
+            fontSize: "16px",
+            color: "#696b70",
+            marginBottom: "12px",
+            flexWrap: "wrap", // 화면 좁으면 줄 바꿈 가능
+            alignItems: "center",
+          }}
+        >
+          <span>
+            <strong>작성자:</strong> {post.user_id}
+          </span>
+          <span>|</span>
+          <span>
+            <strong>작성일:</strong> {post.created_at}
+          </span>
+          <span>|</span>
+          <span>
+            <strong>신고 종류:</strong>{" "}
+            {post.report_types &&
+              Object.entries(
+                post.report_types.reduce((acc, type) => {
+                  acc[type] = (acc[type] || 0) + 1;
+                  return acc;
+                }, {})
+              ).map(([type, count]) => `${type}(${count})`).join(", ")}
+          </span>
+        </div>
+
         <hr style={{ margin: "12px 0" }} />
+
         <div>
           {editor && <EditorContent editor={editor} />}
         </div>

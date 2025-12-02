@@ -28,7 +28,7 @@ const MainIndex = () => {
       {/* 메인 콘텐츠 */}
       <div className={mainLayoutClassName}>
         <Routes>
-          <Route path="/dashboard" element={<DashboardIndex />} />
+          <Route path="/" element={<DashboardIndex />} />
           <Route path="/report/*" element={<Report />} />  {/* <-- /report/* 로 수정 */}
           <Route path="/member/*" element={<Member />} />
         </Routes>

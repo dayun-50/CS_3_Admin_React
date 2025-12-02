@@ -3,23 +3,36 @@ import BoardList from "./BoardList";
 import BoardDetail from "./BoardDetail";
 import CommentList from "./CommentList";
 import CommentDetail from "./CommentDetail"; // 추가
-import { MOCK_BOARD, MOCK_COMMENT } from "./mockData";
 import styles from "./Report.module.css";
+import { sendAdminMessage } from "../../webSocket/connectWebSocket";
 
 const Report = () => {
   const [viewType, setViewType] = useState("board"); // board | comment
   const [selectedPost, setSelectedPost] = useState(null);
   const [selectedComment, setSelectedComment] = useState(null);
+  const [newRender, setNewRender] = useState(false);
 
   const handleBack = () => setSelectedPost(null);
   const handleCloseComment = () => setSelectedComment(null);
   const handleDeletePost = (id) => {
-    alert(`게시글 ${id} 삭제`);
-    handleBack();
+    // eslint-disable-next-line no-restricted-globals
+    if (confirm(`게시글 ${id}를 삭제하시겠습니까?`)) {
+      sendAdminMessage("/pub/admin/notify/send/board", Number(id));
+      handleBack();
+      setTimeout(() => {
+        setNewRender(prev => !prev);
+      }, 500);
+    }
   };
   const handleDeleteComment = (id) => {
-    alert(`댓글 ${id} 삭제`);
-    handleCloseComment();
+    // eslint-disable-next-line no-restricted-globals
+    if (confirm(`게시글 ${id}를 삭제하시겠습니까?`)) {
+      sendAdminMessage("/pub/admin/notify/send/comment", Number(id));
+      handleCloseComment();
+      setTimeout(() => {
+        setNewRender(prev => !prev);
+      }, 500);
+    }
   };
 
   return (
@@ -47,15 +60,16 @@ const Report = () => {
       {/* 게시판 */}
       {viewType === "board" && (
         selectedPost ? (
-          <BoardDetail 
-            post={selectedPost} 
-            onBack={handleBack} 
-            onDelete={() => handleDeletePost(selectedPost.id)} 
+          <BoardDetail
+            post={selectedPost}
+            setSelectedPost={setSelectedPost}
+            onBack={handleBack}
+            onDelete={() => handleDeletePost(selectedPost.board_seq)}
           />
         ) : (
-          <BoardList 
-            data={MOCK_BOARD} 
-            onSelectPost={setSelectedPost} 
+          <BoardList
+            newRender={newRender}
+            onSelectPost={setSelectedPost}
           />
         )
       )}
@@ -63,14 +77,16 @@ const Report = () => {
       {/* 댓글 */}
       {viewType === "comment" && (
         <>
-          <CommentList 
-            data={MOCK_COMMENT} 
-            onSelectComment={setSelectedComment} 
+          <CommentList
+            newRender={newRender}
+            onSelectComment={setSelectedComment}
           />
           {selectedComment && (
-            <CommentDetail 
-              comment={selectedComment} 
-              onClose={handleCloseComment} 
+            <CommentDetail
+              comment={selectedComment}
+              setSelectedComment={setSelectedComment}
+              onClose={handleCloseComment}
+              onDelete={() => handleDeleteComment(selectedComment.comment_seq)}
             />
           )}
         </>

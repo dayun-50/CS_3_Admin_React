@@ -2,42 +2,82 @@ import styles from "./DashLeftOne.module.css";
 import React from "react";
 import { Bar } from "react-chartjs-2";
 import "../../../../chartSetup";
+import useDashLeftOne from "./useDashLeftOne";
 
 const DashLeftOne = () => {
 
+    const { bars } = useDashLeftOne();
+
+    const sum = bars.reduce((acc, b) => acc + b.value, 0);
+
+    // Chart.js 데이터 구조
     const data = {
-        labels: ["Red", "Blue", "Green", "314"],
+        labels: bars.map(b => b.label),
         datasets: [
             {
-                label: "판매량",
-                data: [12, 19, 7, 10],
-                backgroundColor: ["#f87171", "#60a5fa", "#34d399", "#34d399"],
+                label: "",
+                data: bars.map(b => b.value),
+                backgroundColor: bars.map(b => b.color),
             },
         ],
     };
 
-    // 합계 계산
-    const sum = data.datasets[0].data.reduce((a, b) => a + b, 0);
     const options = {
-        indexAxis: "y", // 가로 막대
+        indexAxis: "y",
         responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+            y: {
+                ticks: {
+                    display: false, // y축 라벨 숨기기
+                },
+                grid: {
+                    drawOnChartArea: false, // 막대 안쪽 격자선 제거
+                    drawTicks: false,        // 눈금 표시 제거
+                    drawBorder: false,       
+                },
+            },
+            x: {
+                ticks: { display: false }, // x축 숫자 숨김
+                grid: {
+                    drawOnChartArea: false, // 막대 안쪽 격자선 제거
+                    drawTicks: false,        // 눈금 제거
+                    drawBorder: true,        // x축 가장자리 선 유지
+                },
+            },
+        },
         plugins: {
-            legend: { display: true },
+            legend: { display: false },
             tooltip: {
                 callbacks: {
                     label: function (context) {
-                        const value = context.raw;
-                        const percentage = ((value / sum) * 100).toFixed(1); // 소수점 1자리
-                        return `${context.label}: ${percentage}%`;
+                        const b = bars[context.dataIndex];
+                        const percentage = ((b.value / sum) * 100).toFixed(1);
+                        return `${b.label}: ${percentage}%`;
                     },
                 },
+            },
+            datalabels: {
+                color: "#696B70",
+                anchor: "start",
+                align: "end",
+                clip: false,
+                padding: { left: 50 },
+                formatter: (value, context) => {
+                    const b = bars[context.dataIndex];
+                    const percentage = ((b.value / sum) * 100).toFixed(1);
+                    return `${b.label}\n${percentage}%`; // 막대 끝에 %와 라벨 표시
+                },
+                
             },
         },
     };
 
+
     return (
         <div className={styles.onecontainer}>
-            <Bar data={data} options={options} />
+            <div>게시물 신고 태그 누적</div>
+            <Bar data={data} options={options} style={{ margin: "20px 8px 40px 8px", width: "100%", height: "100%" }} />
         </div>
     );
 };

@@ -31,7 +31,7 @@ const DashboardIndex = () => {
     
    const options = {
     responsive: true,
-    cutout: "50%",
+    cutout: "50%",    
     plugins: {
         legend: {
             position: "bottom",

@@ -25,7 +25,6 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path='/*' element={!isLogin ? <Login /> : <MainIndex />} />
-          {/* <Route path="/*" element={<MainIndex />} /> */}
         </Routes>
       </BrowserRouter>
     </div>

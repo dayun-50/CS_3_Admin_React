@@ -1,8 +1,12 @@
 import { useEffect, useState } from "react";
 import { caxios } from "../../config/config";
+import useAuthStore from "../../store/useAuthStore";
+import { useNavigate } from "react-router-dom";
 
 function useMemberList(newRender) {
 
+    const logout = useAuthStore(state => state.logout);
+    const navi = useNavigate();
     const [data, setData] = useState([{}]);
 
     useEffect(() => {
@@ -22,6 +26,10 @@ function useMemberList(newRender) {
                 });
 
                 setData(formattedData);
+            })
+            .catch(err => {
+                logout();
+                navi("/");
             })
     }, [newRender])
 

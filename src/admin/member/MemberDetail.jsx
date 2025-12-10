@@ -45,9 +45,7 @@ const MemberDetail = ({ member, setNewRender, onClose }) => {
                         {/* 생일 */}
                         <p className={styles.infoKey}>생일</p>
                         <p className={styles.infoValue}>
-                            {member.birth_date
-                                ? member.birth_date.split("-").map((v, i) => (i === 0 ? v.slice(2) : v)).join(".")
-                                : ""}
+                            {member.birth_date}
                         </p>
 
                         {/* 연락처 */}
